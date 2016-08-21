@@ -1,0 +1,22 @@
+---
+layout: default
+title: Tags
+---
+
+<div class="home">
+	<div class="posts">
+		{% for category in site.categories %}
+		<div class="post-teaser">
+		<span><h2>{{ category | first }} ({{ category | last | size }})</h2></span>
+		<ul class="arc-list">
+			{% for post in category.last %}
+				<li>
+					<span class="post-teaser-title"><a href="{{ post.url }}">{{ post.title }}</a></span>
+					<span class="post-teaser-date">{{ post.date | date:"%Y-%m-%d"}}</span>
+				</li>
+			{% endfor %}
+		</ul>
+		</div>
+		{% endfor %}
+	<div>
+</div>
