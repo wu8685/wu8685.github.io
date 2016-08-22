@@ -5,9 +5,12 @@ categories: [golang, docker]
 ---
 
 最近由于项目需要，自己实现了Prometheus对Swarm的服务发现，以方便收集metrics。代码在[github](https://github.com/wu8685/prometheus)，`retrieval/discovery/swarm`。基于[Prometheus](https://github.com/prometheus/prometheus) 0.17.0和[Swarm](https://github.com/docker/swarm) v1.1.0。
+
 ## 系统需求
 因为Swarm自身并没有为prometheus提供metrics的输出接口，所以需要在Swarm的每个master和node上跑一个CAdvisor。插件默认CAdvisor的`/metrics`entrypoint默认接口为8070（可配置）。
+
 ## 配置
+
 ```
 - job_name: service-swarm
   swarm_sd_configs:
@@ -17,12 +20,15 @@ categories: [golang, docker]
     refresh_interval: 1s
     metrics_port: '8060'
 ```
+
 - **refresh_interval** 制定插件去收集metrics的时间间隔；
 - **metrics** 制定CAdvisor的`/metircs`端口；
 - label policy的相关配置和Kubernetes的一致。
 
 ## 原理
+
 #### Prometheus服务发现插件接口
+
 ```
 // prometheus/retrieval/targetmanager.go
 
@@ -46,6 +52,7 @@ Sources() []string
 Run(up chan<- config.TargetGroup, done <-chan struct{})
 }
 ```
+
 - Sources() []string，返回当前provider的标示。target manager将返回的string作为target group的ID
 - Run(up chan<- config.TargetGroup, done <-chan struct{})，启动target provider。provider会将最新的target group信息输出到up这个channel中，以通知target manager。
 
@@ -64,13 +71,16 @@ Labels model.LabelSet
 Source string
 }
 ```
+
 - Targets，会被prometheus解析，用于获得target metrics的访问信息，会被添加到metrics记录上；
 - Labels，普通的label，会被添加到metrics记录上；
 - Source，等同于ID。
 
 #### Swarm服务发现原理
+
 ##### Nodes
 1.通过定时访问Swarm master的REST API`/info`，拿到cluster的最新信息。
+
 ```
 // 访问swarm master的/info api 得到的response body
 
@@ -207,7 +217,9 @@ Source string
  "ClusterAdvertise": ""
 }
 ```
+
 2.解析文本，提取出node的信息。将这些信息封装到target group中，通过channel通知target manager
+
 ```
 func (d *Discovery) Run(up chan<- config.TargetGroup, done <-chan struct{}) {
 	defer close(up)
@@ -237,9 +249,11 @@ func (d *Discovery) Run(up chan<- config.TargetGroup, done <-chan struct{}) {
 	}
 }
 ```
+
 ##### Masters
 Swarm master是静态的，通过prometheus配置文件提供。当provider启动后，直接将master信息通知到target manager（见Run方法代码）。
 但是访问master获取node信息的时候，添加有rotation机制，以找到当前正在工作的master。
+
 ```
 func (c *swarmClient) getNodeInfo() (*Info, error) {
 	c.masterMu.Lock()
@@ -274,6 +288,7 @@ func (c *swarmClient) rotateMaster() {
 	}
 }
 ```
+
 #### 一些想法
 - Swarm master的`/info`返回的json文本，格式相当粗糙。直接就是无脑的把`docker -H X.X.X.X:2375 info`命令的输出给转换成了kv格式。所以才会出现` └ `这种符号。给文本解析带来不便；
 - 除了REST API的方式，还可以考虑etcd的watch机制，或者Swarm自己的发现机制`docker/docker/pkg/discovery`.

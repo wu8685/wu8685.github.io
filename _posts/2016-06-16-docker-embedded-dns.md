@@ -5,6 +5,7 @@ categories: [docker]
 ---
 
 因为工作需要，去学习了下Docker的embedded DNS. 这个功能似乎是1.10才加进来的，用来对Docker自带的overlay网络提供DNS服务（容器）发现。我学习的是Docker1.10.3版本，对应的libnetwork是release/v0.7。这个版本的Embedded DNS仅支持IPv4，后续的1.11版本还会支持IPv6.
+
 # Container Network Model（CNM）
 Docker的容器网络模型如下图所示：
 ![CNM from github.com/docker/libnetwork]({{ "/img/posts/2016-06-16-docker-embeded-dns.md/cnm.jpg" | prepend: site.baseurl }})
@@ -16,6 +17,7 @@ Docker的容器网络模型如下图所示：
 
 # How it works
 怎么工作的，其实可以从两个角度来看
+
 #### 从Container的角度
 ![Docker Network Embedded DNS]({{ "/img/posts/2016-06-16-docker-embeded-dns.md/network_on_embeded_dns.png" | prepend: site.baseurl }})
 1. Sandbox每次通过一个Endpoint去Join一个Network都会去发布一把这个ep，`sb.populateNetworkResources(ep)`. 其中回去判断一把这个Network是否需要resolver，即Embedded DNS. 如果是用户定义的Network则会enable embedder DNS功能`sb.startResolver()`。anyway，Sandbox都会将这个ep的信息保存到NetworkController的一个Map解构中`networkController.svcDB`。他保存了每个Network中的每个ep的name、alias和分配的IP的对应关系。是跨host的name resolution的根据。（`libnetwork/sandbox.go`）

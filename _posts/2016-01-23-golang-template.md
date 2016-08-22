@@ -9,8 +9,11 @@ categories: [golang]
 基于template做的那个[tool transforming Junit XML report to HTML](https://github.com/wu8685/htmlizer).
 
 Golang提供了对模板的支持（按照文档的说法，是数据驱动模板，data-driven template），分别在"text/template"和"html/template"两个包下。这两个包在api级别是一致的，只是"html/template"提供了对html文本的更好支持，比如会将一些html中的关键符号（类似'<', '>'之类的）做些转义处理再输出。所以以下就只对"html/template"做下介绍。
+
 # 模板定义 #
+
 ### hello world ###
+
 ```
 t := template.Must(template.New("hello").Parse("hello world"))
 t.Execute(os.Stdout, nil)
@@ -18,12 +21,17 @@ t.Execute(os.Stdout, nil)
 // output:
 // hello
 ```
+
 此处，*template.Must(\*template.Template, error )*会在*Parse*返回*err*不为*nil*时，调用*panic*。*Must*的引入，说的不好听点，就是为了中和Golang将*error*置于函数返回值这种做法带来的缺点。
+
 ### 有了*Must*，我们可以将两句inline在一起。 ###
+
 ```
 template.Must(template.New("hello").Parse("hello world")).Execute(os.Stdout, nil)
 ```
+
 ### 从文件初始化模板 ###
+
 ```
 t := template.Must(template.ParseFiles("hello.txt"))
 t.Execute(os.Stdout, nil)
@@ -34,7 +42,9 @@ t.Execute(os.Stdout, nil)
 // output:
 // hello world
 ```
+
 ### 通过文件名字，指定对应的模板 ###
+
 ```
 t := template.New("hello")
 template.Must(t.ParseFiles("hello.txt"))
@@ -47,9 +57,13 @@ t.ExecuteTemplate(os.Stdout, "world.txt", nil)
 // output:
 // another file
 ```
+
 所以，一个*template*实例，其实是一个模板的集合，我们可以为每个模板命名。
+
 # 数据驱动 #
+
 ### hello world ###
+
 {% raw %}
 ```
 s := "LiLei"
@@ -60,7 +74,9 @@ t.Execute(os.Stdout, s)
 // Watch out, LiLei!
 ```
 {% endraw %}
+
 ### 也可以传点别的 ###
+
 {% raw %}
 ```
 s := &student{Name: "Han Meimei", Age: 30}
@@ -71,7 +87,9 @@ t.Execute(os.Stdout, s)
 // Han Meimei looks like more than 30 years old!
 ```
 {% endraw %}
+
 ### Map ###
+
 {% raw %}
 ```
 marrage_info := map[string]bool{
@@ -85,7 +103,9 @@ t.Execute(os.Stdout, marrage_info )
 // Married: Han Meimei:true; Li Lei:false
 ```
 {% endraw %}
+
 在template中key有空格，得用到*index*。
+
 {% raw %}
 ```
 info := map[string]bool{
@@ -99,7 +119,9 @@ t.Execute(os.Stdout, info)
 // Married: Han Meimei:true; Li Lei:false
 ```
 {% endraw %}
+
 ### array/slice ###
+
 {% raw %}
 ```
 infos := []string{"Han Meimei", "Lilei"}
@@ -115,7 +137,9 @@ t.Execute(os.Stdout, infos)
 // Lilei,
 ```
 {% endraw %}
+
 ### 自定义变量 ###
+
 {% raw %}
 ```
 infos := []string{"Han Meimei", "Lilei"}
@@ -131,7 +155,9 @@ t.Execute(os.Stdout, infos)
 // 1. Lilei,
 ```
 {% endraw %}
+
 ### 条件查询 ###
+
 {% raw %}
 ```
 s := "LiLei"
@@ -142,19 +168,25 @@ t.Execute(os.Stdout, s)
 // Man
 ```
 {% endraw %}
+
 ### 转义 ###
+
 在"html/template"中，如下两端代码是等价的。
+
 {% raw %}
 ```
 <a href="/search?q={{.}}">{{.}}</a>
 ```
 {% endraw %}
+
 {% raw %}
 ```
 <a href="/search?q={{. | urlquery}}">{{. | html}}</a>
 ```
 {% endraw %}
+
 比如
+
 {% raw %}
 ```
 s := "<script>"
@@ -165,9 +197,13 @@ t.Execute(os.Stdout, s)
 // %3Cscript%3E and <script>
 ```
 {% endraw %}
+
 # 模板重构 #
+
 Golang提供的几个功能，为模板的重构提供了更多的可能。
+
 ### 自定义方法 ###
+
 {% raw %}
 ```
 // func returnBool(b bool) bool {
@@ -185,7 +221,9 @@ t.Execute(os.Stdout, true)
 // Carefully!
 ```
 {% endraw %}
+
 ### 嵌套模板 ###
+
 {% raw %}
 ```
 s := &student{Name: "Han Meimei", Age: 30}
@@ -199,4 +237,5 @@ t.Execute(os.Stdout, s)
 // Name: Han Meimei; Age: 30.
 ```
 {% endraw %}
+
 这里也提供了另外一个方法去指定一个模板的名字。

@@ -11,6 +11,7 @@ categories: [golang]
 - Value主要封装了“值”的属性，与值相关的东西找他没错。此外，他是线程安全的（或者叫goroutine安全）.
 
 # Structs for Case
+
 ``` go
 type Class struct {
     Name    string   `json:"name"`
@@ -24,9 +25,13 @@ type Student struct {
     Age  int    `json:"age"`
 }
 ```
+
 # Cycle
+
 反射机制主要是了解它的整个cycle，才能玩的转。。。
+
 ### Object->Reflect->Object
+
 ``` go
 s := Student{Name: "LiLei", Age: 20}
 
@@ -46,8 +51,10 @@ if s, ok := val.Interface().(Student); ok {
 // The name is LiLei.
 // The student is LiLei.
 ```
+
 ### Type->Object
 毕竟golang没有jvm那种东西，不能runtime加载。所以type还是得从hard code得到
+
 ``` go
 t := reflect.TypeOf(Student{})
 val := reflect.New(t)
@@ -56,10 +63,14 @@ fmt.Println(val.Type().String())
 // output
 // *main.Student
 ```
+
 这里reflect.New(reflect.Type)返回的是指向new出的value的指针。
-# Reflect Operation #
+
+# Reflect Operation
 使用反射最主要的还是要能操作对象啦
+
 ### Traverse Object
+
 ``` go
 s := &Student{"LiLei", 18}
 c := &Class{"Class A", s, 6, "Century Ave"}
@@ -91,8 +102,11 @@ for i := 0; i < val.NumField(); i = i + 1 {
 // The 2 th Grade types int valuing 6 with tag env GRADE
 // The 3 th school types string valuing Century Ave with tag env SCHOOL
 ```
+
 这里，私有的属性也是能遍历到值的。Tag可以为struct附带很多信息，合理利用可以出奇迹啊。
+
 ### Modify Object
+
 ``` go
 c := &Class{}
 
@@ -123,8 +137,11 @@ fmt.Printf("%v\n", c)
 // The 3 th school is unaccessible.
 // &{LiLei <nil> 18 }
 ```
+
 ### Map/Array/Slice/Channel
+
 Golang的reflect还针对其他几个类型提供了特殊的api。
+
 ``` go
 m := map[string]string{
     "a": "A",
@@ -141,4 +158,5 @@ for _, k := range mv.MapKeys() {
 // a - A
 // b - B
 ```
+
 其他类型也有对应的api，具体就查doc吧。
