@@ -2,6 +2,7 @@
 layout: post
 title: Golang defer
 categories: [golang]
+tags: [golang, defer]
 ---
 
 话题起于同事在微信群里发了张图，是[Go Newsletter](https://twitter.com/golangweekly)于13日在Twitter上转的一个代码截图，问输出是啥？

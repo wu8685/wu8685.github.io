@@ -2,6 +2,7 @@
 layout: post
 title: Docker Embedded DNS
 categories: [docker]
+tags: [docker, embedded dns]
 ---
 
 因为工作需要，去学习了下Docker的embedded DNS. 这个功能似乎是1.10才加进来的，用来对Docker自带的overlay网络提供DNS服务（容器）发现。我学习的是Docker1.10.3版本，对应的libnetwork是release/v0.7。这个版本的Embedded DNS仅支持IPv4，后续的1.11版本还会支持IPv6.

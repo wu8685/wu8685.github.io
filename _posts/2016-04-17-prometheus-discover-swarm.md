@@ -2,6 +2,7 @@
 layout: post
 title: Prometheus对Swarm的服务发现插件
 categories: [golang, docker]
+tags: [prometheus, swarm, discovery]
 ---
 
 最近由于项目需要，自己实现了Prometheus对Swarm的服务发现，以方便收集metrics。代码在[github](https://github.com/wu8685/prometheus)，`retrieval/discovery/swarm`。基于[Prometheus](https://github.com/prometheus/prometheus) 0.17.0和[Swarm](https://github.com/docker/swarm) v1.1.0。

@@ -2,6 +2,7 @@
 layout: post
 title: Javascript对象继承
 categories: [javascript]
+tags: [js, object, extension]
 ---
 
 开门见山，以下根据继承方式的不同逐一介绍：

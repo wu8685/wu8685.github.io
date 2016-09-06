@@ -2,6 +2,7 @@
 layout: post
 title: Golang Template
 categories: [golang]
+tags: [golang, template]
 ---
 
 最近刚好有个task是要用Golang把Junit的XML格式report转换成HTML格式，便学习了Golang的template包。

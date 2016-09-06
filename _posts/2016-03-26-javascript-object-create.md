@@ -2,6 +2,7 @@
 layout: post
 title: Javascript对象创建
 categories: [javascript]
+tags: [js, object, create]
 ---
 
 这几天花时间好好把js中的对象创建整理了一下，这块也是我之前比较薄弱的环节。

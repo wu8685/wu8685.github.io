@@ -2,6 +2,7 @@
 layout: post
 title: Golang Reflection
 categories: [golang]
+tags: [golang, reflection]
 ---
 
 最近的一个task是要读取环境变量中的配置，于是想到了反射机制。反射机制常常能提供更高维度的视野，可以写出更general的程序。
