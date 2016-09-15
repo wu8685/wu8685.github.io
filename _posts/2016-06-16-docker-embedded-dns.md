@@ -18,7 +18,7 @@ Docker的容器网络模型如下图所示：
 
 # How it works
 
-#### 什么情况下会使用embedded DNS
+## 什么情况下会使用embedded DNS
 
 方法`Daemon.connectToNetwork()`是被调用来将一个container连接到某个网络的。
 
@@ -95,7 +95,7 @@ func (n NetworkMode) IsUserDefined() bool {
 
 而整个embedded DNS的生命周期，其实可以从两个角度来看
 
-#### 从Container的角度
+## Container的角度
 ![Docker Network Embedded DNS]({{ "/img/posts/2016-06-16-docker-embeded-dns.md/network_on_embeded_dns.png" | prepend: site.baseurl }})
 1. Sandbox每次通过一个Endpoint去Join一个Network都会去发布一把这个ep，`sb.populateNetworkResources(ep)`. 其中回去判断一把这个Network是否需要resolver，即Embedded DNS. 如果是用户定义的Network则会enable embedder DNS功能`sb.startResolver()`。anyway，Sandbox都会将这个ep的信息保存到NetworkController的一个Map解构中`networkController.svcDB`。他保存了每个Network中的每个ep的name、alias和分配的IP的对应关系。是跨host的name resolution的根据。（`libnetwork/sandbox.go`）
 
@@ -104,7 +104,7 @@ func (n NetworkMode) IsUserDefined() bool {
   1) `sb.rebuildDNS()`首先会**记录**初始时容器内部的/etc/resolv.conf文件的内容，然后更新/etc/resolv.conf文件，将servername指向127.0.0.11。（**127.0.0.0/8网段都是loopback地址**）
 ![resolv.conf in container]({{ "/img/posts/2016-06-16-docker-embeded-dns.md/resolv_conf.png" | prepend: site.baseurl }})
 
-  2) `sb.resolver.SetExtServers(sb.extDNS)`将之前读取的容器初始/etc/resolv.conf文件的nameserver作为embedded DNS的recursive DNS，当embedded DNS不能resolve name的时候就delegate到extDNS。**注意**`这也是为什么--nameserver参数还能工作的原因`，虽然容器内的/etc/resolv.conf文件显示的nameserver还是127.0.0.11
+  2) `sb.resolver.SetExtServers(sb.extDNS)`将之前读取的容器初始/etc/resolv.conf文件的nameserver作为embedded DNS的recursive DNS，当embedded DNS不能resolve name的时候就delegate到extDNS。**注意**`这也是为什么docker run --dns参数还能工作的原因`，虽然容器内的/etc/resolv.conf文件显示的nameserver还是127.0.0.11
 
   3) `sb.osSbox.InvokeFunc(sb.resolver.SetupFunc())`在Container环境中申请tcp和udp两个*随机*端口，姑且命其为tcp_port和udp_port。
 
@@ -115,7 +115,7 @@ func (n NetworkMode) IsUserDefined() bool {
 
 3. 当DNS query来的时候，resolver会去handle：`r.ServeDNS( )`。resolver会在方法`r.handleIPQuery( )`里去resolve name。他会delegate给Sandbox`sb.ResolveName( )`，然后是去NetworkController里的`SvcDB`里查找：。没找到就delegate到ExtDNS。
 
-#### 从Docker Daemon的角度
+## Docker Daemon的角度
 ![Docker Network Embedded DNS Process \(zoom-in-able\)]({{ "/img/posts/2016-06-16-docker-embeded-dns.md/embeded_dns_process.png" | prepend: site.baseurl }})
 其中紫色部分为上一节关于embedded DNS的启动过程。（*图片可通过浏览器放大。。。*）
 这部分是整个环境的搭建流程：
@@ -126,3 +126,11 @@ func (n NetworkMode) IsUserDefined() bool {
 3. 当调用`ep.Delete( )`时，会往NetworkController的`unwatch`channel里放入当前ep，以完成这个DNS record的注销。
 
 整个embedded DNS的环境就是这个样子。
+
+# Recursive DNS
+
+正如之前说的，`sb.rebuildDNS()`会先读取container原始的/etc/resov.conf文件的内容，并记录在内存中。所以在embedded DNS不能解析某个域名时，就会把此域名抛给原生的DNS来解析：
+
+1. docker默认是copy的主机上的/etc/resolv.conf
+
+2. 也可以通过`docker run --dns <DNS-IP>`的方式指定

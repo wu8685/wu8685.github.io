@@ -26,7 +26,7 @@ alert(Person.prototype.constructor == Person);  // true
 也就是这样的引用关系
 ![JS Objects references 引用自《JavaScript高级程序设计》]({{ "/img/posts/2016-03-26-javascript-object-create/hierarchy.png" | prepend: site.baseurl }})
 
-### 一般模式
+## 一般模式
 这是用的最多的，也是最简单的方式。
 
 ```
@@ -50,7 +50,7 @@ alert(person.name);
 alert(person.age);
 ```
 
-### 构造函数模式
+## 构造函数模式
 先看代码
 
 ```
@@ -77,7 +77,7 @@ new出person的过程中，实际上执行了一下这些操作：
 因此，构造函数方式创建的对象，他的所有属性和方法都是在新对象上的，而不定义在prototype上，所以同一个构造函数创建出来的对象，他们之间不会share相同的属性或方法。
 这种方式有一个不足之处，就是构造函数中对this定义的函数也会有两个备份。
 
-### 原型模式
+## 原型模式
 
 ```
 var Person = function() {}
@@ -156,7 +156,7 @@ Person.prototype = {
 alert(Person.prototype.constructor == Person);  // true
 ```
 
-### 组合构造模式
+## 组合构造模式
 
 就是对于share的属性或方法，通过原型模式定义，对于不share的，通过构造函数方式定义。
 
@@ -171,7 +171,7 @@ Person.prototype.myAddresses = function() {
 }
 ```
 
-### getter&setter
+## getter&setter
 
 ```
 var person = {
@@ -198,7 +198,7 @@ alert(person.isAdult);  // true
 这里为person定义一个属性**age**。在操作age时，实际上会调用他的getter和setter，去操作**age**属性。
 当然，这里直接调用_age也是可以的- -!
 
-### 寄生构造模式
+## 寄生构造模式
 长这样的
 
 ```
@@ -217,7 +217,7 @@ alert(person.constructor);  // 他已经是Object的实例了
 这个其实就是和工厂模式一样。实际上，构造函数在不返回值的时候会默认返回新对象实例。而这里return重写了new的返回值，就是person对象，因此name属性是不share的。
 **值得注意的是，这时person已经是Object的实例了**
 
-### 闭包模式
+## 闭包模式
 
 这样的
 

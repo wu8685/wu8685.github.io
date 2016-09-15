@@ -7,10 +7,10 @@ tags: [prometheus, swarm, discovery]
 
 最近由于项目需要，自己实现了Prometheus对Swarm的服务发现，以方便收集metrics。代码在[github](https://github.com/wu8685/prometheus)，`retrieval/discovery/swarm`。基于[Prometheus](https://github.com/prometheus/prometheus) 0.17.0和[Swarm](https://github.com/docker/swarm) v1.1.0。
 
-## 系统需求
+# 系统需求
 因为Swarm自身并没有为prometheus提供metrics的输出接口，所以需要在Swarm的每个master和node上跑一个CAdvisor。插件默认CAdvisor的`/metrics`entrypoint默认接口为8070（可配置）。
 
-## 配置
+# 配置
 
 ```
 - job_name: service-swarm
@@ -26,9 +26,9 @@ tags: [prometheus, swarm, discovery]
 - **metrics** 制定CAdvisor的`/metircs`端口；
 - label policy的相关配置和Kubernetes的一致。
 
-## 原理
+# 原理
 
-#### Prometheus服务发现插件接口
+## Prometheus服务发现插件接口
 
 ```
 // prometheus/retrieval/targetmanager.go
@@ -77,9 +77,9 @@ Source string
 - Labels，普通的label，会被添加到metrics记录上；
 - Source，等同于ID。
 
-#### Swarm服务发现原理
+## Swarm服务发现原理
 
-##### Nodes
+### Nodes
 1.通过定时访问Swarm master的REST API`/info`，拿到cluster的最新信息。
 
 ```
@@ -251,7 +251,7 @@ func (d *Discovery) Run(up chan<- config.TargetGroup, done <-chan struct{}) {
 }
 ```
 
-##### Masters
+### Masters
 Swarm master是静态的，通过prometheus配置文件提供。当provider启动后，直接将master信息通知到target manager（见Run方法代码）。
 但是访问master获取node信息的时候，添加有rotation机制，以找到当前正在工作的master。
 
@@ -290,7 +290,7 @@ func (c *swarmClient) rotateMaster() {
 }
 ```
 
-#### 一些想法
+# 一些想法
 - Swarm master的`/info`返回的json文本，格式相当粗糙。直接就是无脑的把`docker -H X.X.X.X:2375 info`命令的输出给转换成了kv格式。所以才会出现` └ `这种符号。给文本解析带来不便；
 - 除了REST API的方式，还可以考虑etcd的watch机制，或者Swarm自己的发现机制`docker/docker/pkg/discovery`.
 - 通过文本解析的方式去获得node信息，是非常原始的方法，暴力且不可靠。但之所以选择它，主要是考虑到尽量不带入额外的第三方依赖。这样在以后更新Prometheus版本的时候会带来方便（毕竟才0.X.0版本）。
