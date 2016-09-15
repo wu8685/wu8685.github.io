@@ -33,6 +33,7 @@
 	<!-- CSS -->
 	<link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
 	<link rel="stylesheet" href="{{ "/css/toc.css" | prepend: site.baseurl }}">
+	<link rel="stylesheet" href="{{ "/css/cd-top.css" | prepend: site.baseurl }}">
 	
 	<!--Favicon-->
 	<link rel="shortcut icon" href="{{ "/favicon.ico" | prepend: site.baseurl }}" type="image/x-icon">
@@ -81,6 +82,7 @@
 	<script>hljs.initHighlightingOnLoad();</script>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	
 	<script src="{{ "/js/jquery.toc.js" | prepend: site.baseurl }}"></script>
 	<script>
 	(function() {
@@ -95,4 +97,6 @@
 		$(document).ready(initToc);
 	})()
 	</script>
+	
+	<script src="{{ "/js/cd-top.js" | prepend: site.baseurl }}">
 </head>
