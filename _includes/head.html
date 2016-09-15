@@ -79,4 +79,20 @@
 	})()
 	</script>
 	<script>hljs.initHighlightingOnLoad();</script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="{{ "/js/jquery.toc.js" | prepend: site.baseurl }}"></script>
+	<script>
+	(function() {
+		var initToc = function() {
+			$('.post-content').toc({
+				renderIn: $('#toc-content'),
+				minItemsToShowToc:0,
+				saveShowStatus:false
+			})
+		}
+		
+		$(document).ready(initToc);
+	})()
+	</script>
 </head>

@@ -9,7 +9,9 @@ layout: default
     {% if page.author %} - {{ page.author }}{% endif %}
     </p>
   </header>
-  <section class="post-content">{{ content | toc_generate }}</section>
+  <div id="toc-content">
+  </div>
+  <section class="post-content">{{ content }}</section>
 </article>
 
 <!-- Post navigation -->
