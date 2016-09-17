@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Scala学习笔记(一)
+title: Scala学习笔记(一)：基础
 categories: [scala]
 tags: [scala, extends, with]
 ---
