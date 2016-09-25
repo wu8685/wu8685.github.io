@@ -9,15 +9,13 @@ scala的官方文档写得太烂了。没办法，只能找点资料，或者看
 
 *为便于阅读，以下展示的编译后的class文件有做适当调整,且大部分的main函数的object编译内容没有展示*
 
-# OO: Class & Object
-
-## Hierarchy
+# Hierarchy
 基本的继承结构如下图，图片来自官网：
 ![scala继承结构]({{ "/img/posts/2016-09-11-scala-study-part1.md/hierarchy.png" | prepend: site.baseurl }})
 
 `Object`只是AnyRef的一个子类。
 
-## class defination
+# class defination
 整个`class`的结构内都是构造函数，构造函数的参数直接跟在申明后面。在new对象的时候，里面的所有代码都会执行。
 ```scala
 class Person(name: String) {
@@ -108,7 +106,7 @@ public final class Person$
 可见，在类的定义中，除了`def`,**其他语句都是顺序执行的**
 而且`object`申明的变量和方法都是在一个`object_name`+`$`命名的类中以static形式定义出来的
 
-## Extends class
+# Extends class
 语法基本和java一样，有几个前提需要注意的：
 
 1. `var`类型不能被子类重写
@@ -203,7 +201,7 @@ public class Star extends Singer {
 1. 父类的属性是通过调用`super()`进行初始话的，这点和java一样
 2. 父类的属性都是`private`修饰符，对外暴露`public`的getter。如果子类重写父类的属性，那么对应的getter就是子类重写的方法，且只会返回子类的属性值，所以父类的就丢掉了，即**子类继承的属性与父类脱离关系**。
 
-## Trait
+# Trait
 trait类似于java中的接口，但支持部分的实现。一个`trait`其实是被编译成了对应的接口和抽象类两个文件。
 
 ```scala
@@ -292,7 +290,7 @@ public class Star implements Singer {
 * 在Star的构造函数中会调用trait的抽象类的static `$init$()`方法来初始化从trait继承来的song属性。继承来的song属性被申明到了Star中，**与scala中的trait已经脱离了关系**。在java中，interface里申明的都是static变量，所以scala这样实现也是很合理的。
 
 
-## Mixin Class Composition
+# Mixin Class Composition
 
 scala中除了标准的继承，还能通过`with`关键字组合`trait`类型。
 
@@ -458,7 +456,7 @@ public class Student extends Person implements Child, Chinese {
 可以看出，这只是前面extends和trait两种情况的复合版。在子类student的构造函数中，会顺序执行`super()`和`with`trait的`$init$()`方法。结合前面`trait`的实现，可以知道一定是后一个父类/trait的变量的值会作为新值，赋值给子类的同名变量。
 并且从`info()`的实现可以看到`super`引用被翻译成了`Chinese`，也就是后一个父类/trait定义的方法也会覆盖前一个。
 
-## 总结：继承的特点
+# 总结：继承的特点
 
 1. 继承`class A extends B with C with D`其实可以看作是`class A extends << class B with C with D >>`,切对于这个*父类*`class B with C with D`:
 	1. 多重继承的关键字`with`只使用于`trait`
@@ -468,7 +466,7 @@ public class Student extends Person implements Child, Chinese {
 3. 对于方法的继承，一切同java一致
 
 
-## Duck Typing
+# Duck Typing
 
 只要会鸭子叫，就视为鸭子。
 
@@ -497,7 +495,7 @@ object Main {
 ```
 这里需要注意的是：因为得是鸭子叫，所以方法名也必须一致。
 
-## Currying
+# Currying
 
 柯里化。不废话了，看例子。
 
@@ -522,7 +520,7 @@ object Main {
 
 函数可以依次传入多个参数，切每传入一个参数就能生成一个可多次使用的新函数。
 
-## Generic
+# Generic
 
 比较简单的例子
 

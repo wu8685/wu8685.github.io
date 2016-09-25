@@ -5,9 +5,9 @@ categories: [scala]
 tags: [scala, functional, collection]
 ---
 
-# Functional Programming
+关于Scala的函数和集合
 
-## lambda
+# lambda
 
 匿名函数（至少python是叫lambda）算是FO的基本功能了。scala定义一个匿名函数按照如下格式：
 
@@ -26,7 +26,7 @@ object Main {
 // say: world
 ```
 
-## Using pattern matching
+# Using pattern matching
 
 scala中，pattern matching的逻辑语句使用频率很高，配合case class可以代替if用在一些条件判断的情况
 
@@ -53,7 +53,7 @@ object Main {
 // 2
 ```
 
-## Case Class
+# Case Class
 
 Case class是特殊的class：
 
@@ -94,7 +94,7 @@ object Main {
 // 5
 ```
 
-## option and check null pointer
+# option and check null pointer
 
 scala加入了option的概念。option用来封装一个值，并将java的null判断语句封装在其中。个人感觉，和java相比，option的引入带来的好处是将`null的判断`由optional级别提升到了mandatory：java中可能由于代码的不规范，有可能漏掉是否为null的判断，但是scala加了option，在写代码的时候，至少起到reminder的作用。
 
@@ -146,7 +146,7 @@ object Main {
 
 在通过`get()`拿值的时候，如果为空，则会抛出`NoSuchElementException`.
 
-## Lazy initialization
+# Lazy initialization
 
 在属性前添加`lazy`可以让该属性在第一次使用时才被初始化。
 默认情况下，是在创建对象时初始化的：
@@ -199,11 +199,11 @@ object Main {
 // name: Lilei
 ```
 
-## For loop and yield:
+# For loop and yield:
 
 `for`循环和java基本一致，多了一些额外的增强。
 
-### Simple For
+## Simple For
 
 1. 简单遍历index可以通过range的方式：`to`和`until`。`to`包含最后一个index，`until`不包括
 2. 也可以通过range generator实现：
@@ -238,7 +238,7 @@ object Main {
 // 6
 ```
 
-### filter & yield
+## filter & yield
 
 另外还多了`filter`和`yield`的概念。
 `filter`即在for循环申明时可以多加些判断条件进行过滤
@@ -271,7 +271,7 @@ object Main {
 // Lucy is an adult starts with L
 ```
 
-## implicit
+# implicit
 
 implicit用来标示一个隐式转换。
 转换的选择规则如下：
@@ -317,6 +317,19 @@ object Main {
 }
 ```
 
+# Exception
+
+类似于java：
+
+```scala
+try {
+  val result = operation()
+} catch {
+  case e: Exception =>
+    throw e
+}
+```
+
 # Collection
 
 scala中collecion分为`strict`和`lazy`两种，`lazy`的collection中的元素只会在使用的时候被分配内存，比如range
@@ -324,11 +337,11 @@ scala中collecion分为`strict`和`lazy`两种，`lazy`的collection中的元素
 
 他们各自适应于不同的场景，`immutable`更适合与多线程场景。建议的做法是先申明为`immutable`的，当出现需要时，再改为`mutable`的。
 
-## Collection API
+# Collection API
 
 `filter`，`MapReduce`方法可以参考：[https://www.tutorialspoint.com/scala/scala_collections.htm](https://www.tutorialspoint.com/scala/scala_collections.htm)
 
-## Collection Operatin
+# Collection Operatin
 
 默认情况下申明的collection都是`immutable`的，mutable collection需要导入包`scala.collection.mutable`
 
@@ -378,7 +391,7 @@ list match {
 }
 ```
 
-## Parallel Collection
+# Parallel Collection
 
 通过`.par`方法可以返回当前集合的一个并行实现。
 
