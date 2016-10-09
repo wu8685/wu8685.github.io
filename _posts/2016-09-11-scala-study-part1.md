@@ -17,6 +17,7 @@ scala的官方文档写得太烂了。没办法，只能找点资料，或者看
 
 # class defination
 整个`class`的结构内都是构造函数，构造函数的参数直接跟在申明后面。在new对象的时候，里面的所有代码都会执行。
+
 ```scala
 class Person(name: String) {
 
