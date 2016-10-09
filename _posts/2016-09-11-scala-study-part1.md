@@ -107,6 +107,8 @@ public final class Person$
 可见，在类的定义中，除了`def`,**其他语句都是顺序执行的**
 而且`object`申明的变量和方法都是在一个`object_name`+`$`命名的类中以static形式定义出来的
 
+* 对于成员变量`name`，默认是不会生成`getter`和`setter`的。如果需要，可将其申明为`class Person(var name: String)`. `val`则不会生成setter
+
 # Extends class
 语法基本和java一样，有几个前提需要注意的：
 
