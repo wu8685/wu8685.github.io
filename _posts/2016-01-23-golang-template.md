@@ -2,6 +2,7 @@
 layout: post
 title: Golang Template
 categories: [golang]
+tags: [golang, template]
 ---
 
 最近刚好有个task是要用Golang把Junit的XML格式report转换成HTML格式，便学习了Golang的template包。
@@ -10,9 +11,9 @@ categories: [golang]
 
 Golang提供了对模板的支持（按照文档的说法，是数据驱动模板，data-driven template），分别在"text/template"和"html/template"两个包下。这两个包在api级别是一致的，只是"html/template"提供了对html文本的更好支持，比如会将一些html中的关键符号（类似'<', '>'之类的）做些转义处理再输出。所以以下就只对"html/template"做下介绍。
 
-# 模板定义 #
+# 模板定义
 
-### hello world ###
+## hello world
 
 ```
 t := template.Must(template.New("hello").Parse("hello world"))
@@ -24,13 +25,15 @@ t.Execute(os.Stdout, nil)
 
 此处，*template.Must(\*template.Template, error )*会在*Parse*返回*err*不为*nil*时，调用*panic*。*Must*的引入，说的不好听点，就是为了中和Golang将*error*置于函数返回值这种做法带来的缺点。
 
-### 有了*Must*，我们可以将两句inline在一起。 ###
+## Must
+
+有了*Must*，我们可以将两句inline在一起。
 
 ```
 template.Must(template.New("hello").Parse("hello world")).Execute(os.Stdout, nil)
 ```
 
-### 从文件初始化模板 ###
+## 从文件初始化模板
 
 ```
 t := template.Must(template.ParseFiles("hello.txt"))
@@ -43,7 +46,7 @@ t.Execute(os.Stdout, nil)
 // hello world
 ```
 
-### 通过文件名字，指定对应的模板 ###
+## 通过文件名字，指定对应的模板
 
 ```
 t := template.New("hello")
@@ -62,7 +65,7 @@ t.ExecuteTemplate(os.Stdout, "world.txt", nil)
 
 # 数据驱动 #
 
-### hello world ###
+## hello world
 
 {% raw %}
 ```
@@ -75,7 +78,7 @@ t.Execute(os.Stdout, s)
 ```
 {% endraw %}
 
-### 也可以传点别的 ###
+也可以传点别的:
 
 {% raw %}
 ```
@@ -88,7 +91,7 @@ t.Execute(os.Stdout, s)
 ```
 {% endraw %}
 
-### Map ###
+## Map
 
 {% raw %}
 ```
@@ -120,7 +123,7 @@ t.Execute(os.Stdout, info)
 ```
 {% endraw %}
 
-### array/slice ###
+## array/slice
 
 {% raw %}
 ```
@@ -138,7 +141,7 @@ t.Execute(os.Stdout, infos)
 ```
 {% endraw %}
 
-### 自定义变量 ###
+## 自定义变量
 
 {% raw %}
 ```
@@ -156,7 +159,7 @@ t.Execute(os.Stdout, infos)
 ```
 {% endraw %}
 
-### 条件查询 ###
+## 条件查询
 
 {% raw %}
 ```
@@ -169,7 +172,7 @@ t.Execute(os.Stdout, s)
 ```
 {% endraw %}
 
-### 转义 ###
+## 转义
 
 在"html/template"中，如下两端代码是等价的。
 
@@ -202,7 +205,7 @@ t.Execute(os.Stdout, s)
 
 Golang提供的几个功能，为模板的重构提供了更多的可能。
 
-### 自定义方法 ###
+## 自定义方法
 
 {% raw %}
 ```
@@ -222,7 +225,7 @@ t.Execute(os.Stdout, true)
 ```
 {% endraw %}
 
-### 嵌套模板 ###
+## 嵌套模板
 
 {% raw %}
 ```

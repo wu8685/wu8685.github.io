@@ -5,7 +5,7 @@ url: "http://blog.wu8685.com" # the base hostname & protocol for your site
 # THEME-SPECIFIC CONFIGURATION
 theme_settings:
   # Meta
-  title: Kan's blog
+  title: wu8685
   avatar: avatar.png
   gravatar: # Email MD5 hash
   description: "wu8685 kan 's blog" # used by search engines
@@ -38,7 +38,7 @@ theme_settings:
   youtube:
 
   # Scripts
-  google_analytics: # Tracking ID, e.g. "UA-000000-01"
+  google_analytics: "UA-83292471-1" # Tracking ID, e.g. "UA-000000-01"
   disqus_shortname:
   katex: true # Enable if using math markup
 

@@ -2,6 +2,7 @@
 layout: post
 title: Golang Reflection
 categories: [golang]
+tags: [golang, reflection]
 ---
 
 最近的一个task是要读取环境变量中的配置，于是想到了反射机制。反射机制常常能提供更高维度的视野，可以写出更general的程序。
@@ -30,7 +31,7 @@ type Student struct {
 
 反射机制主要是了解它的整个cycle，才能玩的转。。。
 
-### Object->Reflect->Object
+## Object->Reflect->Object
 
 ``` go
 s := Student{Name: "LiLei", Age: 20}
@@ -52,7 +53,7 @@ if s, ok := val.Interface().(Student); ok {
 // The student is LiLei.
 ```
 
-### Type->Object
+## Type->Object
 毕竟golang没有jvm那种东西，不能runtime加载。所以type还是得从hard code得到
 
 ``` go
@@ -69,7 +70,7 @@ fmt.Println(val.Type().String())
 # Reflect Operation
 使用反射最主要的还是要能操作对象啦
 
-### Traverse Object
+## Traverse Object
 
 ``` go
 s := &Student{"LiLei", 18}
@@ -105,7 +106,7 @@ for i := 0; i < val.NumField(); i = i + 1 {
 
 这里，私有的属性也是能遍历到值的。Tag可以为struct附带很多信息，合理利用可以出奇迹啊。
 
-### Modify Object
+## Modify Object
 
 ``` go
 c := &Class{}
@@ -138,7 +139,7 @@ fmt.Printf("%v\n", c)
 // &{LiLei <nil> 18 }
 ```
 
-### Map/Array/Slice/Channel
+## Map/Array/Slice/Channel
 
 Golang的reflect还针对其他几个类型提供了特殊的api。
 

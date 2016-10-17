@@ -4,9 +4,36 @@
 	<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.theme_settings.description }}{% endif %}">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-Frame-Options" content="sameorigin">
+	{% if page.tags %}<meta name="keywords" content="{{ page.tags | join: ', ' }}">{% endif %}
+	
+	<!-- for sharing -->
+	{% if page.title %} {% assign title = page.title ~ ' - ' ~ page.subtitle %} {% else %} {% assign title = site.title %} {% endif %}
+	{% if page.description %} {% assign description = page.description %} {% else %} {% assign description = site.description %} {% endif %}
+	{% if page.keywords %} {% assign keywords = page.keywords %} {% else %} {% assign keywords = site.keywords %} {% endif %}
+	{% if page.cover %} {% assign cover = page.cover %} {% else %} {% assign cover = site.cover %} {% endif %}
+
+	<!-- Twitter Cards -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="{{ title }}" />
+	<meta name="twitter:description" content="{{ description }}" />
+	<meta name="twitter:image" content="{{ site.url }}{{ cover }}" />
+
+	<!-- Google plus -->
+	<meta name="author" content="{{ site.author.googleplus }}">
+	<link rel="author" href="{{ site.author.googleplus }}">
+
+	<!-- Open Graph -->
+	<meta property="og:locale" content="{{ site.lang }}">
+	<meta property="og:type" content="article">
+	<meta property="og:title" content="{{ title }}">
+	<meta property="og:description" content="{{ description }}">
+	<meta property="og:url" content="{{ page.url | replace:'index.html','' | prepend: site.url }}">
+	<meta property="og:site_name" content="{{ site.title }}">
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
+	<link rel="stylesheet" href="{{ "/css/toc.css" | prepend: site.baseurl }}">
+	<link rel="stylesheet" href="{{ "/css/cd-top.css" | prepend: site.baseurl }}">
 	
 	<!--Favicon-->
 	<link rel="shortcut icon" href="{{ "/favicon.ico" | prepend: site.baseurl }}" type="image/x-icon">
@@ -54,4 +81,22 @@
 	</script>
 	<script>hljs.initHighlightingOnLoad();</script>
 	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	
+	<script src="{{ "/js/jquery.toc.js" | prepend: site.baseurl }}"></script>
+	<script>
+	(function() {
+		var initToc = function() {
+			$('.post-content').toc({
+				renderIn: $('#toc-content'),
+				minItemsToShowToc:0,
+				saveShowStatus:false
+			})
+		}
+		
+		$(document).ready(initToc);
+	})()
+	</script>
+	
+	<script src="{{ "/js/cd-top.js" | prepend: site.baseurl }}">
 </head>
