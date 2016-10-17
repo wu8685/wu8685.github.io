@@ -98,6 +98,10 @@ object Main {
 // 5
 ```
 
+# sealed
+
+sealed可以修饰`trait`和`class`，被修饰者的继承类必须在同一文件中，这是为了在编译pattern match的时候对case做检查，看是否所有的case情况都写了，或者存在`case _`
+
 # option and check null pointer
 
 scala加入了option的概念。option用来封装一个值，并将java的null判断语句封装在其中。个人感觉，和java相比，option的引入带来的好处是将`null的判断`由optional级别提升到了mandatory：java中可能由于代码的不规范，有可能漏掉是否为null的判断，但是scala加了option，在写代码的时候，至少起到reminder的作用。
