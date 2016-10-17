@@ -109,8 +109,8 @@ t.Execute(os.Stdout, marrage_info )
 {% raw %}
 ```
 info := map[string]bool{
-"Han Meimei": true,
-"LiLei": false,
+	"Han Meimei": true,
+	"LiLei": false,
 }
 t := template.Must(template.New("test").Parse(`Married: Han Meimei:{{index . "Han Meimei"}}; Li Lei:{{.LiLei}}`))
 t.Execute(os.Stdout, info)
@@ -126,9 +126,9 @@ t.Execute(os.Stdout, info)
 ```
 infos := []string{"Han Meimei", "Lilei"}
 t := template.Must(template.New("test").Parse("Students List:" +
-    "{{range .}}" +
-"\n{{.}}," +
-"{{end}}"))
+	"{{range .}}" +
+	"\n{{.}}," +
+	"{{end}}"))
 t.Execute(os.Stdout, infos)
 
 // output:
@@ -144,9 +144,9 @@ t.Execute(os.Stdout, infos)
 ```
 infos := []string{"Han Meimei", "Lilei"}
 t := template.Must(template.New("test").Parse("Students List:" +
-    "{{range $index, $_ := .}}" +
-"\n{{$index}}. {{.}}," +
-"{{end}}"))
+	"{{range $index, $_ := .}}" +
+	"\n{{$index}}. {{.}}," +
+	"{{end}}"))
 t.Execute(os.Stdout, infos)
 
 // output:
@@ -211,7 +211,7 @@ Golang提供的几个功能，为模板的重构提供了更多的可能。
 // }
 
 funcs := template.FuncMap{
-"is_teacher_coming": returnBool,
+	"is_teacher_coming": returnBool,
 }
 t := template.New("test").Funcs(funcs)
 template.Must(t.Parse("{{if is_teacher_coming .}}Carefully!{{end}}"))
