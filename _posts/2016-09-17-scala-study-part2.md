@@ -72,7 +72,7 @@ object Main {
 
     def compute(exp: Exp): Int = {
       exp match {
-        case Value(v) => v
+        case value @ Value(v) => println(s"value is ${value}"); v	// pattern binder: using @ if want to get reference of object Value
         case Sum(l, r) => compute(l) + compute(r)
         case Sub(l, r) => compute(l) - compute(r)
         case _ => 0
@@ -90,7 +90,11 @@ object Main {
 }
 
 // output
+// value is 1
+// value is 2
 // 3
+// value is 10
+// value is 5
 // 5
 ```
 
