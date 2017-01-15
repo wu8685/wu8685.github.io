@@ -201,6 +201,8 @@ t.Execute(os.Stdout, s)
 ```
 {% endraw %}
 
+另外还有方法`HTMLEscape`和`JSEscape`用于输出普通的文本格式。如果需要输出所见即所得的样子，可以考虑这个。
+
 # 模板重构 #
 
 Golang提供的几个功能，为模板的重构提供了更多的可能。
