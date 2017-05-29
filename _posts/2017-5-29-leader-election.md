@@ -42,7 +42,7 @@ tags: [distribution lock, leader election]
 一般数据库的实现一来于单个SQL语句的原子性。数据库表至少包括如下三个字段：
 
 | 字段 | 描述 |
-| ----- | ----- |
+| -- | ----- |
 | Key | PK |
 | Signature | 每个candidate自己的特征，如hostname，id等 |
 | UpdatedTime | 记录被更新的时间 |
@@ -50,7 +50,7 @@ tags: [distribution lock, leader election]
 `Key`和`Signature`之前描述过，`UpdatedTime`是当前记录被更新的时间。因为数据库没有TTL的功能，所以这里用时间戳来描述：每次执行SQL对记录进行修改时（如更新TTL，尝试替换Signature等），都需要带上当前的时间`now`，如果`now - UpdatedTIme > TTL`则视当前记录的签名已经过期。
 
 | action | SQL |
-| ----- | ----- |
+| -- | ----- |
 | check unexpired | select * from [table] where key=[key] and [TTL] > timestampdiff(second, updated_time, [current_time]) |
 | insert key | insert into <table> (key, signature, updated_time) values ([key], [signature], [current_time]) |
 | try replace | update [table] set updated_time = [current_time], signature = [signature] where key = [key] and [TTL] <= timestampdiff(second, updated_time, [current_time]) |
