@@ -61,7 +61,7 @@ alert(SuperType.prototype.isPrototypeOf(instance));  //true
 alert(Object.prototype.isPrototypeOf(instance));        //true
 ```
 
-使用原型链有个很明显的问题，就是子对象都share同一个父对象的属性，如果是引用类型，就可能对一个对象修改，却影响了其他对象的数据。
+使用原型链有个很明显的问题，就是子对象都share同一个父对象的属性，如果是引用类型，就可能对一个对象修改，却影响了其他对象的数据。另外instance.construct拿到的不再是自己的构造函数`SubType function`而是`SuperType function`。
 
 # 构造函数继承
 

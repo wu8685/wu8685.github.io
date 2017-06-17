@@ -26,6 +26,8 @@ alert(Person.prototype.constructor == Person);  // true
 也就是这样的引用关系
 ![JS Objects references 引用自《JavaScript高级程序设计》]({{ "/img/posts/2016-03-26-javascript-object-create/hierarchy.png" | prepend: site.baseurl }})
 
+**Note**: 实际上，构造函数`Person constructor`和他的原型`prototype`是通过`Person constructor`.prototype和`prototype`.constructor相互引用的。因此实例person1和person2会有原型的属性constructor，指向构造函数`Person constructor`。
+
 ## 一般模式
 这是用的最多的，也是最简单的方式。
 
