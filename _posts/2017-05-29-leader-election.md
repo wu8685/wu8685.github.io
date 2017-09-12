@@ -10,7 +10,7 @@ tags: [distribution lock, leader election]
 项目中实现了有状态服务的`leader election`功能，这就涉及到了分布式锁的实现。
 分布式锁的原理很简单，如下：
 
-![distribution lock]({{ "/img/posts/2017-5-29-leader-election.md/distribution_lock.png" | prepend: site.baseurl }})
+![distribution lock]({{ "/img/posts/2017-05-29-leader-election.md/distribution_lock.png" | prepend: site.baseurl }})
 
 打个简单的比方，分布式锁的竞争就像两个人A和B想往一个保险箱safe里放自己的签名（signature）。保险箱的size只有1，所以同时只能容下一个人的签名。并且这个签名是带有有效期的（expiration），因此有效期内不被再次刷新就作废，保险箱重新被腾出来。
 
@@ -21,7 +21,7 @@ tags: [distribution lock, leader election]
 
 从上面的例子可以提取出一个选举算法的流程图：
 
-![leader election]({{ "/img/posts/2017-5-29-leader-election.md/leader_election.png" | prepend: site.baseurl }})
+![leader election]({{ "/img/posts/2017-05-29-leader-election.md/leader_election.png" | prepend: site.baseurl }})
 
 每一个竞选者都是一个candidate的实现，每个candidate会实现自己的`onElected`和`onDefeated`方法，作为选举成功或从成功转为失败的callback。每个candidate都会对应一个同样的key，这个key标识了一个分布式锁的id。并且每个candidate都有自己的特有signature，可以是id，也可以是hostname。
 
