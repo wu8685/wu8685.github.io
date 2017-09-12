@@ -5,6 +5,8 @@ categories: [Kubernetes]
 tags: [Kubernetes]
 ---
 
+读了下kubelet下k8s volume manager的代码
+
 ![volume manager]({{ "/img/posts/2017-09-12-k8s-volume-manager.md/volume_manager.png" | prepend: site.baseurl }})
 
 # 流程
@@ -258,7 +260,6 @@ volumes:
 #### mount
 执行plugin的NewMounter.SetUp方法。
 1. 执行git命令：
-2. 
 ``` go
 $ git clone <gitRepo.repository> [gitRepo.directory] /var/lib/kubelet/pods/<pod-uid>/volumes/kubernetes.io~git-repo/<volume-name>
 ```
