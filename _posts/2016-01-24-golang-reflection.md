@@ -61,6 +61,9 @@ t := reflect.TypeOf(Student{})
 val := reflect.New(t)
 fmt.Println(val.Type().String())
 
+student := val.interface().(Student) // use type assertion
+student.Name = "LiLei"
+
 // output
 // *main.Student
 ```
