@@ -9,6 +9,8 @@ tags: [git]
 
 ## 流程控制
 
+![git practice]({{ "/img/posts/2017-12-17-git-practice.md/git-practice.png" | prepend: site.baseurl }})
+
 * 最稳定的代码放在master分支上，不要直接在master分支上提交代码，只能在该分支上进行代码合并操作，例如将其它分支的代码merge到master分支上。
 
 * 伴随master分支，checkout一条develop分支供所有人访问。但一般情况下，我们也不会直接在该分支上提交代码，develop上的代码主要是从其他的分支merge过来。
