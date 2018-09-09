@@ -10,6 +10,7 @@ tags: [flink]
 首先，flink的checkpoint并不是将Subtask或者UDF对象进行序列化，然后保存。他们确实实现了Serializable接口，但是是为了要在Client，JobManager和TaskManager之间传输Graph。最终被checkpoint保存的每个subtask的状态只有raw state和managed state两种。raw state是用户自己进行序列化，而managed state是在operator生命周期初始化时就被注册到backend storage对象中了，在进行checkpoint时，会直接拿到注册的state进行保存（中间会调用回调函数，在UDF中对state进行赋值）。所以checkpoint的state不是很大的数据。
 
 其次，checkpoint要保存的每个subtask的state并不是自然时刻下，他们的state。如下图所示，并不是要将Source1的3，Source2的4，Task1的2，Task2的3保存下来。如果要这样保存的话，那么on-the-fly的数据也要保存，否则无法从checkpoint中还原这个瞬间。checkpoint真正要保存的时刻是指的flink processing time或者event time概念下的瞬间。很显然，图中的这个瞬间至少Source和Task是不在一个“时刻”的，因为Source1的“时间”显然晚于Task1的“时间”。
+
 ![flink-checkpoint-01]({{ "/img/posts/2018-09-09-flink-checkpoint.md/flink-checkpoint-01.png" | prepend: site.baseurl }})
 
 # Easy Understand
@@ -28,9 +29,11 @@ tags: [flink]
 于是有了Chandy-Lamport算法。他解决的问题，就是在不停止流处理的前提下拿到每个subtask在某一瞬间的snapshot，从而完成checkpoint。
 
 1. 在checkpoint触发时刻，Job Manager会往所有Source的流中放入一个barrier（图中三角形）。barrier包含当前checkpoint的ID
+
 ![flink-checkpoint-02]({{ "/img/posts/2018-09-09-flink-checkpoint.md/flink-checkpoint-02.png" | prepend: site.baseurl }})
 
 2. 当barrier经过一个subtask时，即表示当前这个subtask处于checkpoint触发的“时刻”，他就会立即将barrier法往下游，并执行checkpoint方法将当前的state存入backend storage。图中Source1和Source2就是完成了checkpoint动作。
+
 ![flink-checkpoint-03]({{ "/img/posts/2018-09-09-flink-checkpoint.md/flink-checkpoint-03.png" | prepend: site.baseurl }})
 
 3. 如果一个subtask有多个上游节点，这个subtask就需要等待所有上游发来的barrier都接收到，才能表示这个subtask到达了checkpoint触发“时刻”。但所有节点的barrier不一定一起到达，这时候就会面临“是否要对齐barrier”的问题（`Barrier Alignment`）。如图中的Task1.1，他有2个上游节点，Source1和Source2。假设Source1的barrier先到，这时候Task1.1就有2个选择：
