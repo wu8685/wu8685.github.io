@@ -28,15 +28,15 @@ tags: [flink]
 
 于是有了Chandy-Lamport算法。他解决的问题，就是在不停止流处理的前提下拿到每个subtask在某一瞬间的snapshot，从而完成checkpoint。
 
-1. 在checkpoint触发时刻，Job Manager会往所有Source的流中放入一个barrier（图中三角形）。barrier包含当前checkpoint的ID
+* 在checkpoint触发时刻，Job Manager会往所有Source的流中放入一个barrier（图中三角形）。barrier包含当前checkpoint的ID
 
 ![flink-checkpoint-02]({{ "/img/posts/2018-09-09-flink-checkpoint.md/flink-checkpoint-02.png" | prepend: site.baseurl }})
 
-2. 当barrier经过一个subtask时，即表示当前这个subtask处于checkpoint触发的“时刻”，他就会立即将barrier法往下游，并执行checkpoint方法将当前的state存入backend storage。图中Source1和Source2就是完成了checkpoint动作。
+* 当barrier经过一个subtask时，即表示当前这个subtask处于checkpoint触发的“时刻”，他就会立即将barrier法往下游，并执行checkpoint方法将当前的state存入backend storage。图中Source1和Source2就是完成了checkpoint动作。
 
 ![flink-checkpoint-03]({{ "/img/posts/2018-09-09-flink-checkpoint.md/flink-checkpoint-03.png" | prepend: site.baseurl }})
 
-3. 如果一个subtask有多个上游节点，这个subtask就需要等待所有上游发来的barrier都接收到，才能表示这个subtask到达了checkpoint触发“时刻”。但所有节点的barrier不一定一起到达，这时候就会面临“是否要对齐barrier”的问题（`Barrier Alignment`）。如图中的Task1.1，他有2个上游节点，Source1和Source2。假设Source1的barrier先到，这时候Task1.1就有2个选择：
+* 如果一个subtask有多个上游节点，这个subtask就需要等待所有上游发来的barrier都接收到，才能表示这个subtask到达了checkpoint触发“时刻”。但所有节点的barrier不一定一起到达，这时候就会面临“是否要对齐barrier”的问题（`Barrier Alignment`）。如图中的Task1.1，他有2个上游节点，Source1和Source2。假设Source1的barrier先到，这时候Task1.1就有2个选择：
 	* 是马上把这个barrier发往下游并等待Source2的barrier来了再做checkpoint
 	* 还是把Source1这边后续的event全都cache起来，等Source2的barrier来了，在做checkpoint，完了再继续处理Source1和Source2的event，当前Source1这边需要先处理cache里的event。
 
