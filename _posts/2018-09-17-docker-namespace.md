@@ -12,7 +12,7 @@ tags: [docker]
 * UTS：隔离当前进程的`主机名和域名`
 * IPC：Inter-Process Communication。linux提供了`信号量，消息队列，共享内存`等方法来支持进程间通信，所以要做到隔离，必须用新的IPC namespace。
 * PID：在PID隔离的空间中，我们可以为容器中的进程重新分配ID，这样可以创建init进程，即PID=1的进程，他是其他所有进程的父进程，可以回收僵尸进程等作用。
-* NS：mount功能的namespace，因为是最早的namespace所以当时就叫NS了，殊不知后面多了这么多namespace种类。对mount namespace下的文件做任何的mount都不会影响到其他namespace的mount信息。::如果当前ns中的某个文件，在其他ns中被mount了，那么删除当前ns中的此文件时，会报错，因为该文件被其他ns给使用（mount）了，这常常会造成容器删除不掉（报Device or resource busy错误）。::mount namespace往往还需要配合`chroot`命令（或系统调用），改变当前进程的root目录，**模拟容器独占root fs的假象**。
+* NS：mount功能的namespace，因为是最早的namespace所以当时就叫NS了，殊不知后面多了这么多namespace种类。对mount namespace下的文件做任何的mount都不会影响到其他namespace的mount信息。`如果当前ns中的某个文件，在其他ns中被mount了，那么删除当前ns中的此文件时，会报错，因为该文件被其他ns给使用（mount）了，这常常会造成容器删除不掉（报Device or resource busy错误）。`mount namespace往往还需要配合`chroot`命令（或系统调用），改变当前进程的root目录，**模拟容器独占root fs的假象**。
 * USER：这个namespace是用来映射主机上的用户/组在当前空间下的用户组ID的，比如将app on host映射成容器中的root。需要配合映射文件`/proc/<pid>/uid_map和/proc/<pid>/gid_map`使用
 * NET：隔离进程中的网络资源
 ## 操作namespace
