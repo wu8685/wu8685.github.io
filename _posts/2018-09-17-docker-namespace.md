@@ -641,8 +641,13 @@ $ brctl delbr mydocker0
 ```
 后续如果要访问外网，就还需要配置iptables，添加NAT操作，开启 ip_forward
 # Reference
-* [Docker基础技术：Linux Namespace（上） | | 酷 壳 - CoolShell](https://coolshell.cn/articles/17010.html)
-* [Docker基础技术：Linux Namespace（下） | | 酷 壳 - CoolShell](https://coolshell.cn/articles/17029.html)
-* [Docker背后的内核知识：命名空间资源隔离](https://linux.cn/article-5057-1.html)
-* [debian bug 739593](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=739593)
-* [github.com/containers-from-scratch](https://github.com/lizrice/containers-from-scratch/issues/3)
+
+[Docker基础技术：Linux Namespace（上） | | 酷 壳 - CoolShell](https://coolshell.cn/articles/17010.html)
+
+[Docker基础技术：Linux Namespace（下） | | 酷 壳 - CoolShell](https://coolshell.cn/articles/17029.html)
+
+[Docker背后的内核知识：命名空间资源隔离](https://linux.cn/article-5057-1.html)
+
+[debian bug 739593](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=739593)
+
+[github.com/containers-from-scratch](https://github.com/lizrice/containers-from-scratch/issues/3)
